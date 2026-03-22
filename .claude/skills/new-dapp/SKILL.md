@@ -72,8 +72,8 @@ C) 只要前端 — 先做界面，合约后面再说
 1. 读取 `~/.claude/styles-presets/{序号}-{风格名}.md`
 2. 读取 `~/.claude/styles-presets/svg-components.md`
 3. 确定 DApp 类型对应的 SVG 动效组合
-4. **加载 3D 玻璃素材库**：读取 `/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json`
-5. 根据 DApp 类型选择素材分类（参考素材选择策略表）
+4. **加载 3D 玻璃素材库**（可选）：检查 `.style-config.json` 中 `assetsLibraryPath` 是否配置，若已配置则读取 `{assetsLibraryPath}/.catalog/index.json`
+5. 若素材库未配置，跳过 Agent 6（仅用 SVG 动效 + 动画库，不使用 3D 玻璃素材）
 
 ### Phase 4: 初始化项目（自动）
 
@@ -134,14 +134,15 @@ subagent_type: general-purpose
 输出到 src/components/svg/
 ```
 
-#### Agent 6: 3D 玻璃素材选取 + 集成
+#### Agent 6: 3D 玻璃素材选取 + 集成（需用户配置素材库路径，未配置则跳过）
 ```
 subagent_type: general-purpose
 任务：从本地 3D 玻璃素材库选取素材，压缩集成到 DApp 项目
 
-素材库：/Users/heart/Desktop/图片储存/建站素材/
-联系表：/Users/heart/Desktop/图片储存/建站素材/.catalog/sheets/
-索引：/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json
+⚠️ 前置条件：用户必须在 .style-config.json 中配置 assetsLibraryPath，否则跳过此 Agent。
+素材库：{assetsLibraryPath}/（从 .style-config.json 读取）
+联系表：{assetsLibraryPath}/.catalog/sheets/
+索引：{assetsLibraryPath}/.catalog/index.json
 
 按 DApp 类型选择：
 | DApp 类型 | 首选素材 | 备选 |
@@ -315,7 +316,7 @@ src/lib/web3/mockData.ts — 模拟数据
 等 6 个 Agent 完成后：
 1. 确保 WalletProvider 包裹整个 app
 2. 确保所有 SVG 组件正确引入
-3. 确保 3D 玻璃素材正确引用到 Hero/Stats/功能区
+3. 若配置了素材库，确保 3D 玻璃素材正确引用到 Hero/Stats/功能区
 4. 确保动画库组件正确懒加载
 5. 确保 Web3 hooks 正确连接
 6. 修复 import 路径和类型错误
@@ -323,22 +324,31 @@ src/lib/web3/mockData.ts — 模拟数据
 
 ## 关键约束
 
-### 视觉素材强制规则
-**每个 DApp 必须同时使用 SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一不可：**
+### 视觉素材规则
+**每个 DApp 必须使用 SVG 动效 + 动画库。3D 玻璃素材为可选增强（需用户配置素材库路径）：**
 
-| 素材类型 | 用途 | 来源 |
-|----------|------|------|
-| SVG 动画组件 | 背景动效、交易脉冲、加载动画 | svg-components.md（代码生成） |
-| 3D 玻璃素材 | Hero 装饰、功能图标、空状态插画 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
-| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
-| GSAP | 滚动驱动动画、数据可视化动效 | npm 包 |
-| Framer Motion | 组件入场/退出/页面过渡 | npm 包 |
+| 素材类型 | 用途 | 来源 | 必需 |
+|----------|------|------|------|
+| SVG 动画组件 | 背景动效、交易脉冲、加载动画 | svg-components.md（代码生成） | ✅ |
+| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 | ✅ |
+| GSAP | 滚动驱动动画、数据可视化动效 | npm 包 | ✅ |
+| Framer Motion | 组件入场/退出/页面过渡 | npm 包 | ✅ |
+| 3D 玻璃素材 | Hero 装饰、功能图标、空状态插画 | 用户自配素材库（.style-config.json > assetsLibraryPath） | ❌ 可选 |
+
+**素材库配置方法**：在项目 `.style-config.json` 中添加：
+```json
+{
+  "assetsLibraryPath": "/your/path/to/3d-glass-assets"
+}
+```
+素材库目录需包含 `.catalog/index.json` 和 `.catalog/sheets/` 联系表。未配置则跳过 3D 玻璃素材，仅用 SVG 动效。
 
 - 代币 Logo → SVG 圆形+文字 + vivus 路径绘制入场
-- 空状态 → SVG 插画 + 3D 玻璃装饰
+- 空状态 → SVG 插画
 - Loading → SVG 动画（TransactionPulse/LoadingSpinner）
-- 背景 → SVG 动效 + 3D 玻璃素材悬浮
-- 图标 → Lucide React + 3D 玻璃素材图标
+- 背景 → SVG 动效
+- 图标 → Lucide React
+- 装饰 → 若配置了素材库，叠加 3D 玻璃素材（悬浮 + 发光）
 
 ### Web3 UX 标准
 - 所有链上操作必须有 loading/success/error 状态

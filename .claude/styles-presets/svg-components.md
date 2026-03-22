@@ -1212,11 +1212,13 @@ export function Scene3D({ className = "", children }: Scene3DProps) {
 
 ---
 
-## 3D 玻璃素材集成
+## 3D 玻璃素材集成（可选 — 需用户自行配置素材库）
 
-建站时必须从本地素材库选取 3D 玻璃装饰素材：
+若用户在 `.style-config.json` 中配置了 `assetsLibraryPath`，可从本地素材库选取 3D 玻璃装饰素材。
+**未配置则跳过此部分，仅使用 SVG 动效 + 动画库。**
 
-**素材库**：`/Users/heart/Desktop/图片储存/建站素材/`（879 张 PNG，10 分类）
+**配置方法**：在项目 `.style-config.json` 中添加 `"assetsLibraryPath": "/your/path/to/assets"`
+素材库目录需包含 `.catalog/index.json` 和 `.catalog/sheets/` 联系表。
 
 ### GlassDecor 组件模板
 ```tsx
@@ -1258,7 +1260,7 @@ export function GlassDecor({
 }
 ```
 
-### 素材选用策略
+### 素材选用策略（仅在配置了素材库时生效）
 
 | 网站类型 | 首选分类 | 备选 |
 |----------|---------|------|
@@ -1267,6 +1269,8 @@ export function GlassDecor({
 | NFT | 447A艺术玻璃, 5082立体抽象 | 627W镭射玻璃 |
 | SaaS/Infrastructure | G314透明玻璃, 35Y玻璃晶体 | 503抽象立体金属 |
 | Meme | 5082立体抽象, Abstract Shapes | 751W艺术图形 |
+
+> 注：以上分类名称仅供参考，实际分类取决于用户素材库内容。
 
 ---
 

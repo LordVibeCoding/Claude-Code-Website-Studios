@@ -20,7 +20,7 @@ You are a specialist in creating visually stunning, large-scale animated SVG ass
 5. **React Component Output** — Every SVG wrapped as a typed React component with props.
 6. **Max 100KB** per SVG file.
 7. **动画库集成** — 除纯 SVG 外，按需使用 vivus（路径绘制）、lottie-web（JSON动画）、react-three-fiber（3D场景）。
-8. **3D 玻璃素材** — 从本地素材库 `/Users/heart/Desktop/图片储存/建站素材/` 选取装饰素材，magick 压缩转 WebP 后集成。
+8. **3D 玻璃素材**（可选）— 若项目 `.style-config.json` 配置了 `assetsLibraryPath`，从该路径选取装饰素材，magick 压缩转 WebP 后集成。未配置则跳过。
 
 ## 动画库工具箱
 
@@ -33,10 +33,10 @@ You are a specialist in creating visually stunning, large-scale animated SVG ass
 | Framer Motion | React 组件入场/退出/布局动画 | 卡片入场、页面过渡 |
 | react-three-fiber | WebGL 3D 渲染 | GameFi/Metaverse Hero 区、3D 代币展示 |
 
-## 3D 玻璃素材库
+## 3D 玻璃素材库（可选 — 需用户配置）
 
-素材库路径：`/Users/heart/Desktop/图片储存/建站素材/`
-联系表路径：`/Users/heart/Desktop/图片储存/建站素材/.catalog/sheets/`
+素材库路径：从项目 `.style-config.json` 的 `assetsLibraryPath` 字段读取。未配置则跳过此部分。
+联系表路径：`{assetsLibraryPath}/.catalog/sheets/`
 
 | 分类 | 风格 | 适用 |
 |------|------|------|

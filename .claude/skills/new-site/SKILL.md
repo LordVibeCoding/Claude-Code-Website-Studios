@@ -105,8 +105,8 @@ H) DAO — 去中心化组织
 2. 提取 CSS Variables、Tailwind Config、Core CSS Classes、Component Patterns
 3. 读取 `~/.claude/styles-presets/svg-components.md` 获取 SVG 动效组件库
 4. 根据风格选择最匹配的 SVG 动效组合（参考 svg-motion-designer agent 的风格映射表）
-5. **加载 3D 玻璃素材库**：读取 `/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json`
-6. 根据项目类别选择素材分类（参考素材选择策略表）
+5. **加载 3D 玻璃素材库**（可选）：检查 `.style-config.json` 中 `assetsLibraryPath` 是否配置，若已配置则读取 `{assetsLibraryPath}/.catalog/index.json`
+6. 若素材库未配置，跳过 Agent 5（仅用 SVG 动效 + 动画库，不使用 3D 玻璃素材）
 
 ### Phase 4: 初始化项目（自动）
 
@@ -166,14 +166,15 @@ viewBox 统一 0 0 1920 1080（Hero）或 0 0 1920 200（Divider）
 - 入场/过渡动画 → Framer Motion
 ```
 
-#### Agent 5: 3D 玻璃素材选取 + 集成
+#### Agent 5: 3D 玻璃素材选取 + 集成（需用户配置素材库路径，未配置则跳过）
 ```
 subagent_type: general-purpose
 任务：从本地 3D 玻璃素材库中选取最匹配的素材，压缩后集成到项目
 
-素材库路径：/Users/heart/Desktop/图片储存/建站素材/
-联系表路径：/Users/heart/Desktop/图片储存/建站素材/.catalog/sheets/
-索引文件：/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json
+⚠️ 前置条件：用户必须在 .style-config.json 中配置 assetsLibraryPath，否则跳过此 Agent。
+素材库路径：{assetsLibraryPath}/（从 .style-config.json 读取）
+联系表路径：{assetsLibraryPath}/.catalog/sheets/
+索引文件：{assetsLibraryPath}/.catalog/index.json
 
 按项目类别选择分类：
 | 项目类别 | 首选素材分类 | 备选 |
@@ -276,7 +277,7 @@ subagent_type: general-purpose
 
 1. 检查所有 import 路径是否正确
 2. 确保 SVG 组件被引入到页面
-3. 确保 3D 玻璃素材正确引用到 Hero/Feature/CTA 区域
+3. 若配置了素材库，确保 3D 玻璃素材正确引用到 Hero/Feature/CTA 区域
 4. 确保 globals.css 包含所有 CSS Variables
 5. 确保动画库组件正确懒加载
 6. 修复任何 TypeScript 类型错误
@@ -284,22 +285,30 @@ subagent_type: general-purpose
 
 ## 关键约束
 
-### 视觉素材强制规则
-**每个网站必须同时使用 SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一不可：**
+### 视觉素材规则
+**每个网站必须使用 SVG 动效 + 动画库。3D 玻璃素材为可选增强（需用户配置素材库路径）：**
 
-| 素材类型 | 用途 | 来源 |
-|----------|------|------|
-| SVG 动画组件 | 背景动效、分隔器、脉冲效果 | svg-components.md（代码生成） |
-| 3D 玻璃素材 | Hero 装饰、Feature 图标、视觉焦点 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
-| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
-| GSAP | 滚动驱动动画、时间线编排 | npm 包（已集成） |
-| Framer Motion | 组件入场/退出/布局动画 | npm 包（已集成） |
+| 素材类型 | 用途 | 来源 | 必需 |
+|----------|------|------|------|
+| SVG 动画组件 | 背景动效、分隔器、脉冲效果 | svg-components.md（代码生成） | ✅ |
+| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 | ✅ |
+| GSAP | 滚动驱动动画、时间线编排 | npm 包（已集成） | ✅ |
+| Framer Motion | 组件入场/退出/布局动画 | npm 包（已集成） | ✅ |
+| 3D 玻璃素材 | Hero 装饰、Feature 图标、视觉焦点 | 用户自配素材库（.style-config.json > assetsLibraryPath） | ❌ 可选 |
+
+**素材库配置方法**：在项目 `.style-config.json` 中添加：
+```json
+{
+  "assetsLibraryPath": "/your/path/to/3d-glass-assets"
+}
+```
+素材库目录需包含 `.catalog/index.json` 和 `.catalog/sheets/` 联系表。未配置则跳过 3D 玻璃素材，仅用 SVG 动效。
 
 - Logo → SVG 文字组合 + vivus 路径绘制入场
-- 图标 → Lucide React SVG 或 3D 玻璃素材图标
-- 背景 → SVG 动画 + CSS gradient + 3D 玻璃装饰悬浮
+- 图标 → Lucide React SVG
+- 背景 → SVG 动画 + CSS gradient
 - 图表 → SVG 绘制
-- 装饰 → 3D 玻璃素材（悬浮动画 + 发光效果）+ SVG 动效叠加
+- 装饰 → SVG 动效（若配置了素材库，叠加 3D 玻璃素材悬浮 + 发光效果）
 
 ### 风格强制
 - 颜色只用 CSS Variables（var(--primary) 等）
