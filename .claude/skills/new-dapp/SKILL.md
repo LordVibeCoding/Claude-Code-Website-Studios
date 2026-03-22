@@ -67,11 +67,13 @@ B) 需要写合约 — 我帮你写 + 部署
 C) 只要前端 — 先做界面，合约后面再说
 ```
 
-### Phase 3: 加载风格预设（自动）
+### Phase 3: 加载风格预设 + 素材库（自动）
 
 1. 读取 `~/.claude/styles-presets/{序号}-{风格名}.md`
 2. 读取 `~/.claude/styles-presets/svg-components.md`
 3. 确定 DApp 类型对应的 SVG 动效组合
+4. **加载 3D 玻璃素材库**：读取 `/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json`
+5. 根据 DApp 类型选择素材分类（参考素材选择策略表）
 
 ### Phase 4: 初始化项目（自动）
 
@@ -84,10 +86,11 @@ mkdir -p {projectSlug}/src/{
   lib/{web3,utils},
   hooks
 }
+mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 ```
 
 生成基础配置：
-- `package.json` — Next.js 15 + wagmi v2 + viem + RainbowKit + @tanstack/react-query
+- `package.json` — Next.js 15 + wagmi v2 + viem + RainbowKit + @tanstack/react-query + GSAP + Framer Motion + lottie-web + vivus + three + @react-three/fiber
 - `tailwind.config.ts` — 风格预设
 - `src/styles/globals.css` — CSS Variables
 - `src/styles/style-preset.css` — 风格类
@@ -97,14 +100,14 @@ mkdir -p {projectSlug}/src/{
 - `src/lib/web3/chains.ts` — 链配置
 - `src/lib/web3/formatters.ts` — 地址/金额/时间格式化
 
-### Phase 5: Agent Teams 并行构建（必须 5 个 Agent 同时启动）
+### Phase 5: Agent Teams 并行构建（必须 6 个 Agent 同时启动）
 
-#### Agent 1: SVG 动效全套
+#### Agent 1: SVG 动效 + 动画库集成
 ```
 subagent_type: general-purpose
 参考 ~/.claude/styles-presets/svg-components.md
-生成 DApp 专用 SVG 组件：
 
+**Part A: DApp 专用 SVG 组件**
 1. HeroBackground.tsx — DApp 首页动态背景
 2. DashboardGrid.tsx — 仪表盘网格背景
 3. TransactionPulse.tsx — 交易脉冲动效（每次交易触发）
@@ -115,8 +118,49 @@ subagent_type: general-purpose
 8. EmptyState.tsx — 空状态插画（SVG）
 9. index.ts — 统一导出
 
+**Part B: 动画库封装组件**
+10. LottieAnimation.tsx — lottie-web 封装（懒加载 + 交叉观察器）
+11. SvgDrawAnimation.tsx — vivus 封装（Logo/图标路径绘制入场）
+12. Scene3D.tsx — @react-three/fiber 3D 场景（仅需要时）
+
+动画库选用：
+- Logo/图标入场 → vivus
+- 复杂序列动画 → lottie-web
+- 3D 装饰 → react-three-fiber
+- 滚动动画 → GSAP ScrollTrigger
+- 入场/过渡 → Framer Motion
+
 全部颜色用 CSS Variables
 输出到 src/components/svg/
+```
+
+#### Agent 6: 3D 玻璃素材选取 + 集成
+```
+subagent_type: general-purpose
+任务：从本地 3D 玻璃素材库选取素材，压缩集成到 DApp 项目
+
+素材库：/Users/heart/Desktop/图片储存/建站素材/
+联系表：/Users/heart/Desktop/图片储存/建站素材/.catalog/sheets/
+索引：/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json
+
+按 DApp 类型选择：
+| DApp 类型 | 首选素材 | 备选 |
+|-----------|---------|------|
+| DEX/Swap | 627W镭射玻璃, 1237镀铬形状 | 704W科幻晶体 |
+| Staking | 1237镀铬形状, G314透明玻璃 | 503抽象立体金属 |
+| Lending | G314透明玻璃, 35Y玻璃晶体 | 503抽象立体金属 |
+| NFT Marketplace | 447A艺术玻璃, 5082立体抽象 | 627W镭射玻璃 |
+| DAO | 503抽象立体金属, G314透明玻璃 | 1237镀铬形状 |
+| Launchpad | 627W镭射玻璃, 5082立体抽象 | Abstract Shapes |
+| Bridge | 704W科幻晶体, 1237镀铬形状 | 627W镭射玻璃 |
+| Dashboard | G314透明玻璃, Abstract Shapes | 35Y玻璃晶体 |
+
+执行：
+1. 查看联系表选 5-8 个素材
+2. magick 压缩转 WebP（Hero 800-1200px, 图标 200-400px, 装饰 100-200px）
+3. 输出到 public/assets/
+4. 生成 src/lib/assets.ts — 素材路径常量
+5. 生成 src/components/ui/GlassDecor.tsx — 玻璃装饰组件
 ```
 
 #### Agent 2: Web3 核心层
@@ -268,21 +312,33 @@ src/lib/web3/mockData.ts — 模拟数据
 
 ### Phase 6: 组装验证
 
-等 5 个 Agent 完成后：
+等 6 个 Agent 完成后：
 1. 确保 WalletProvider 包裹整个 app
 2. 确保所有 SVG 组件正确引入
-3. 确保 Web3 hooks 正确连接
-4. 修复 import 路径和类型错误
-5. `pnpm install && pnpm build` 验证
+3. 确保 3D 玻璃素材正确引用到 Hero/Stats/功能区
+4. 确保动画库组件正确懒加载
+5. 确保 Web3 hooks 正确连接
+6. 修复 import 路径和类型错误
+7. `pnpm install && pnpm build` 验证
 
 ## 关键约束
 
-### 零图片原则
-- 代币 Logo → SVG 圆形+文字
-- 空状态 → SVG 插画
-- Loading → SVG 动画
-- 背景 → SVG + CSS
-- 图标 → Lucide React
+### 视觉素材强制规则
+**每个 DApp 必须同时使用 SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一不可：**
+
+| 素材类型 | 用途 | 来源 |
+|----------|------|------|
+| SVG 动画组件 | 背景动效、交易脉冲、加载动画 | svg-components.md（代码生成） |
+| 3D 玻璃素材 | Hero 装饰、功能图标、空状态插画 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
+| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
+| GSAP | 滚动驱动动画、数据可视化动效 | npm 包 |
+| Framer Motion | 组件入场/退出/页面过渡 | npm 包 |
+
+- 代币 Logo → SVG 圆形+文字 + vivus 路径绘制入场
+- 空状态 → SVG 插画 + 3D 玻璃装饰
+- Loading → SVG 动画（TransactionPulse/LoadingSpinner）
+- 背景 → SVG 动效 + 3D 玻璃素材悬浮
+- 图标 → Lucide React + 3D 玻璃素材图标
 
 ### Web3 UX 标准
 - 所有链上操作必须有 loading/success/error 状态

@@ -98,23 +98,26 @@ H) DAO — 去中心化组织
 - Layered Paper — 文档层次
 - Aurora — 梦幻共治
 
-### Phase 3: 加载风格预设（自动）
+### Phase 3: 加载风格预设 + 素材库（自动）
 
 根据用户选择的风格：
 1. 读取 `~/.claude/styles-presets/{序号}-{风格名}.md`
 2. 提取 CSS Variables、Tailwind Config、Core CSS Classes、Component Patterns
 3. 读取 `~/.claude/styles-presets/svg-components.md` 获取 SVG 动效组件库
 4. 根据风格选择最匹配的 SVG 动效组合（参考 svg-motion-designer agent 的风格映射表）
+5. **加载 3D 玻璃素材库**：读取 `/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json`
+6. 根据项目类别选择素材分类（参考素材选择策略表）
 
 ### Phase 4: 初始化项目（自动）
 
 用 Bash 执行：
 ```bash
 mkdir -p {projectSlug}/src/{app/{about,features,tokenomics,community},components/{svg,sections,ui,layout},styles,lib,hooks}
+mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 ```
 
 生成基础配置文件：
-- `package.json` — Next.js 15 + TypeScript + Tailwind 4 + GSAP + Framer Motion + lucide-react
+- `package.json` — Next.js 15 + TypeScript + Tailwind 4 + GSAP + Framer Motion + lucide-react + lottie-web + vivus + three + @react-three/fiber
 - `tailwind.config.ts` — 注入风格预设的 extend 配置
 - `tsconfig.json`
 - `next.config.ts`
@@ -125,15 +128,17 @@ mkdir -p {projectSlug}/src/{app/{about,features,tokenomics,community},components
 - `src/lib/constants.ts` — 项目常量（名称、合约、链接等）
 - `src/lib/metadata.ts` — SEO 元数据配置
 
-### Phase 5: Agent Teams 并行构建（核心 — 必须 4 个 Agent 同时启动）
+### Phase 5: Agent Teams 并行构建（核心 — 必须 5 个 Agent 同时启动）
 
-**用 Agent tool 同时发起 4 个 agent，run_in_background=true：**
+**用 Agent tool 同时发起 5 个 agent，run_in_background=true：**
 
-#### Agent 1: SVG 动效全套
+#### Agent 1: SVG 动效 + 动画库集成
 ```
 subagent_type: general-purpose
-任务：根据 {选定风格} 为 {项目名} 生成全套 SVG React 组件
-参考 ~/.claude/styles-presets/svg-components.md 中的 8 种基础组件
+任务：根据 {选定风格} 为 {项目名} 生成全套动效组件
+
+**Part A: SVG React 组件**
+参考 ~/.claude/styles-presets/svg-components.md 中的 20 种组件
 根据风格调整颜色使用 CSS Variables var(--primary) var(--accent) 等
 
 必须生成：
@@ -147,6 +152,55 @@ subagent_type: general-purpose
 输出到 src/components/svg/
 所有颜色用 CSS Variables，不硬编码
 viewBox 统一 0 0 1920 1080（Hero）或 0 0 1920 200（Divider）
+
+**Part B: 动画库组件（按需使用）**
+7. LottieAnimation.tsx — lottie-web 封装组件（懒加载 + 交叉观察器触发）
+8. SvgDrawAnimation.tsx — vivus 封装（SVG 路径绘制动画，用于 Logo 入场/图标入场）
+9. Scene3D.tsx — @react-three/fiber 3D 场景组件（仅 GameFi/Metaverse 类项目需要）
+
+动画库选用策略：
+- Logo/图标入场 → vivus（SVG 路径绘制）
+- 复杂序列动画 → lottie-web（JSON 动画）
+- 3D 装饰/GameFi → react-three-fiber
+- 滚动动画/交互动画 → GSAP ScrollTrigger
+- 入场/过渡动画 → Framer Motion
+```
+
+#### Agent 5: 3D 玻璃素材选取 + 集成
+```
+subagent_type: general-purpose
+任务：从本地 3D 玻璃素材库中选取最匹配的素材，压缩后集成到项目
+
+素材库路径：/Users/heart/Desktop/图片储存/建站素材/
+联系表路径：/Users/heart/Desktop/图片储存/建站素材/.catalog/sheets/
+索引文件：/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json
+
+按项目类别选择分类：
+| 项目类别 | 首选素材分类 | 备选 |
+|----------|------------|------|
+| DeFi/Web3 | 627W镭射玻璃, 1237镀铬形状 | 704W科幻晶体 |
+| GameFi | 704W科幻晶体, 627W镭射玻璃 | 1237镀铬形状 |
+| SocialFi | 35Y玻璃晶体, G314透明玻璃 | Abstract Shapes |
+| NFT | 447A艺术玻璃, 5082立体抽象 | 627W镭射玻璃 |
+| Meme | 5082立体抽象, Abstract Shapes | 751W艺术图形 |
+| Infrastructure | 503抽象立体金属, G314透明玻璃 | 35Y玻璃晶体 |
+| DAO | 1237镀铬形状, G314透明玻璃 | 503抽象立体金属 |
+
+执行步骤：
+1. 用 Read 工具查看对应分类的联系表（.catalog/sheets/{分类名}.jpg）
+2. 选择 5-8 个最匹配的素材
+3. 用 magick 压缩并转换为 WebP：
+   - Hero 装饰: 800-1200px
+   - Feature 图标: 200-400px
+   - 背景装饰: 600-1000px
+   - 小装饰: 100-200px
+4. 输出到 public/assets/{decorations,icons,backgrounds}/
+5. 生成 src/lib/assets.ts — 素材路径常量映射
+6. 生成 src/components/ui/GlassDecor.tsx — 玻璃装饰组件（悬浮动画 + 发光效果）
+
+CSS 集成：
+.glass-float { animation: float 6s ease-in-out infinite; }
+.chrome-glow { filter: drop-shadow(0 0 20px rgba(120, 200, 255, 0.3)); }
 ```
 
 #### Agent 2: 页面结构
@@ -218,23 +272,34 @@ subagent_type: general-purpose
 9. src/app/icon.tsx — Favicon（SVG 生成）
 ```
 
-### Phase 6: 组装验证（等 4 个 Agent 完成后）
+### Phase 6: 组装验证（等 5 个 Agent 完成后）
 
 1. 检查所有 import 路径是否正确
 2. 确保 SVG 组件被引入到页面
-3. 确保 globals.css 包含所有 CSS Variables
-4. 修复任何 TypeScript 类型错误
-5. 运行 `pnpm install && pnpm build` 验证
+3. 确保 3D 玻璃素材正确引用到 Hero/Feature/CTA 区域
+4. 确保 globals.css 包含所有 CSS Variables
+5. 确保动画库组件正确懒加载
+6. 修复任何 TypeScript 类型错误
+7. 运行 `pnpm install && pnpm build` 验证
 
 ## 关键约束
 
-### 零图片原则
-- **整个网站不使用任何 PNG/JPG/WebP 图片**
-- Logo → SVG 文字组合
-- 图标 → Lucide React SVG 或自绘 SVG
-- 背景 → SVG 动画 + CSS gradient
+### 视觉素材强制规则
+**每个网站必须同时使用 SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一不可：**
+
+| 素材类型 | 用途 | 来源 |
+|----------|------|------|
+| SVG 动画组件 | 背景动效、分隔器、脉冲效果 | svg-components.md（代码生成） |
+| 3D 玻璃素材 | Hero 装饰、Feature 图标、视觉焦点 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
+| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
+| GSAP | 滚动驱动动画、时间线编排 | npm 包（已集成） |
+| Framer Motion | 组件入场/退出/布局动画 | npm 包（已集成） |
+
+- Logo → SVG 文字组合 + vivus 路径绘制入场
+- 图标 → Lucide React SVG 或 3D 玻璃素材图标
+- 背景 → SVG 动画 + CSS gradient + 3D 玻璃装饰悬浮
 - 图表 → SVG 绘制
-- 装饰 → CSS + SVG
+- 装饰 → 3D 玻璃素材（悬浮动画 + 发光效果）+ SVG 动效叠加
 
 ### 风格强制
 - 颜色只用 CSS Variables（var(--primary) 等）

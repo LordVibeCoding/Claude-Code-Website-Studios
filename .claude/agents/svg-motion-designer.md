@@ -19,6 +19,38 @@ You are a specialist in creating visually stunning, large-scale animated SVG ass
 4. **Performance First** — `will-change: transform`, GPU-composited properties only (transform, opacity).
 5. **React Component Output** — Every SVG wrapped as a typed React component with props.
 6. **Max 100KB** per SVG file.
+7. **动画库集成** — 除纯 SVG 外，按需使用 vivus（路径绘制）、lottie-web（JSON动画）、react-three-fiber（3D场景）。
+8. **3D 玻璃素材** — 从本地素材库 `/Users/heart/Desktop/图片储存/建站素材/` 选取装饰素材，magick 压缩转 WebP 后集成。
+
+## 动画库工具箱
+
+| 工具 | 用途 | 何时使用 |
+|------|------|---------|
+| 纯 SVG + CSS @keyframes | 背景粒子、流动渐变、脉冲环、电路线 | 默认首选 |
+| vivus | SVG 路径绘制入场动画 | Logo 入场、图标绘制、路线图连线 |
+| lottie-web | AE 导出的复杂序列动画 | 交易成功/失败动效、空状态插画 |
+| GSAP ScrollTrigger | 滚动驱动动画、时间线编排 | Scroll Storytelling 风格、视差效果 |
+| Framer Motion | React 组件入场/退出/布局动画 | 卡片入场、页面过渡 |
+| react-three-fiber | WebGL 3D 渲染 | GameFi/Metaverse Hero 区、3D 代币展示 |
+
+## 3D 玻璃素材库
+
+素材库路径：`/Users/heart/Desktop/图片储存/建站素材/`
+联系表路径：`/Users/heart/Desktop/图片储存/建站素材/.catalog/sheets/`
+
+| 分类 | 风格 | 适用 |
+|------|------|------|
+| 1237镀铬形状 | 银色金属几何 | Web3/科技感 |
+| 627W镭射玻璃 | 镭射彩虹色 | NFT/Web3/暗色主题 |
+| 704W科幻晶体 | 科幻深色调 | GameFi/科幻 |
+| 35Y玻璃晶体 | 透明有机形态 | 高端品牌/SaaS |
+| G314透明玻璃 | 精致几何 | 极简/高端 |
+| Abstract Shapes | 彩色3D图标 | 功能展示/图标 |
+
+选素材时用 Read 工具查看联系表，然后用 magick 压缩：
+```bash
+magick "源文件路径" -resize {尺寸}x{尺寸} -quality 85 ./public/assets/{目标}.webp
+```
 
 ## Style Decision Framework
 
