@@ -7,7 +7,7 @@ tools: Read, Glob, Bash, Write, Edit
 # Setup Stack — Technology Stack Configuration
 
 ## Purpose
-Install and configure the complete Web3 website development stack: Next.js 15, TypeScript, Tailwind CSS 4, wagmi v2, viem, RainbowKit, Hardhat, and supporting libraries.
+Install and configure the complete Web3 website development stack: Next.js 15, TypeScript, Tailwind CSS v3（⚠️ 禁止 v4，大量 CSS 会失效）, wagmi v2, viem, RainbowKit, Hardhat, and supporting libraries.
 
 ## When to Use
 - Starting a new project from scratch
@@ -38,7 +38,7 @@ pnpm add -D @types/node hardhat @nomicfoundation/hardhat-toolbox hardhat-deploy
 pnpm add -D @openzeppelin/contracts
 ```
 
-### 3. Configure Tailwind CSS 4
+### 3. Configure Tailwind CSS v3（禁止 v4）
 Update `tailwind.config.ts`:
 - Add custom color palette (from design tokens)
 - Configure font families (Inter, Space Grotesk, JetBrains Mono)

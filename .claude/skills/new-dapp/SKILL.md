@@ -91,7 +91,7 @@ mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 
 生成基础配置：
 - `package.json` — Next.js 15 + wagmi v2 + viem + RainbowKit + @tanstack/react-query + GSAP + Framer Motion + lottie-web + vivus + three + @react-three/fiber
-- `tailwind.config.ts` — 风格预设
+- `tailwind.config.ts` — 风格预设（⚠️ 必须用 Tailwind v3，禁止 v4）
 - `src/styles/globals.css` — CSS Variables
 - `src/styles/style-preset.css` — 风格类
 - `.style-config.json` — 风格配置

@@ -117,7 +117,7 @@ mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 ```
 
 生成基础配置文件：
-- `package.json` — Next.js 15 + TypeScript + Tailwind 4 + GSAP + Framer Motion + lucide-react + lottie-web + vivus + three + @react-three/fiber
+- `package.json` — Next.js 15 + TypeScript + Tailwind CSS v3（⚠️ 禁止 v4，大量 CSS 会失效）+ GSAP + Framer Motion + lucide-react + lottie-web + vivus + three + @react-three/fiber
 - `tailwind.config.ts` — 注入风格预设的 extend 配置
 - `tsconfig.json`
 - `next.config.ts`

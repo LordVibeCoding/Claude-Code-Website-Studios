@@ -115,7 +115,7 @@ Question → Options → Decision → Draft → Approval
 ### Frontend (Default)
 - **Framework**: Next.js 15 (App Router, RSC)
 - **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 4 + CSS Modules
+- **Styling**: Tailwind CSS v3 (NOT v4 — many CSS features break) + CSS Modules
 - **Animation**: GSAP + Framer Motion
 - **State**: Zustand
 - **Forms**: React Hook Form + Zod

@@ -1,4 +1,4 @@
-# Skills Reference — All 37 Slash Commands
+# Skills Reference — All 38 Slash Commands
 
 ## Project Bootstrap
 
@@ -9,13 +9,14 @@
 | 3 | `/new-dapp` | Scaffold DApp — wallet connection, contract integration, DApp-specific pages (DEX/staking/lending/marketplace/DAO). | Bootstrap |
 | 4 | `/new-token` | Create BEP20 token page — live price ticker, tokenomics charts, swap widget, contract info display. | Bootstrap |
 | 5 | `/new-nft` | Build NFT collection project — mint page, gallery, rarity display, metadata integration, IPFS setup. | Bootstrap |
-| 6 | `/setup-stack` | Install and configure tech stack — Next.js 15, TypeScript, Tailwind 4, wagmi v2, Hardhat, testing tools. | Bootstrap |
+| 6 | `/setup-stack` | Install and configure tech stack — Next.js 15, TypeScript, Tailwind CSS v3 (NOT v4), wagmi v2, Hardhat, testing tools. | Bootstrap |
 | 7 | `/pick-style` | Interactive design style selector from 25 built-in styles with recommendations by project type. | Bootstrap |
+| 8 | `/ui-ux-pro-max` | Design intelligence — 67 styles, 96 color palettes (161 product types), 57 font pairings. Auto-generates design system by product type. Eliminates default blue/purple. | Design |
 
 ### Typical Bootstrap Chain
 
 ```
-/start → /new-site (or /new-dapp, /new-token, /new-nft) → /setup-stack → /pick-style
+/start → /new-site (or /new-dapp, /new-token, /new-nft) → /setup-stack → /pick-style → ui-ux-pro-max (auto)
 ```
 
 ---
@@ -111,7 +112,7 @@ Code written → /code-review → /contract-review (if Solidity) → /security-a
 |----------|--------|-------|
 | Bootstrap | start, new-site, new-dapp, new-token, new-nft, setup-stack, pick-style | 7 |
 | Creative | brainstorm, prototype | 2 |
-| Design | design-system, design-review | 2 |
+| Design | design-system, design-review, ui-ux-pro-max | 3 |
 | Web3 | connect-wallet, deploy-contract | 2 |
 | Quality | code-review, accessibility-check, tech-debt | 3 |
 | Security | contract-review, security-audit | 2 |
@@ -121,4 +122,4 @@ Code written → /code-review → /contract-review (if Solidity) → /security-a
 | Release | release-checklist, launch-checklist, changelog, hotfix | 4 |
 | Team | team-frontend, team-contract, team-design, team-web3, team-release, team-polish | 6 |
 | Architecture | map-systems | 1 |
-| **Total** | | **37** |
+| **Total** | | **38** |
