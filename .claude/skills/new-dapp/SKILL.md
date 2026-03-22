@@ -10,6 +10,30 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 
 **只问 DApp 类型 + 设计风格，问完后 Agent Teams 全自动并行出全套可运行 DApp。**
 
+## PUA 强制注入协议（铁律 — 不可跳过）
+
+**本技能产出的每一个 DApp 都必须是精美到让人 WOW 的作品。简单/素/基础 = 3.25 绩效。**
+
+### 反偷懒铁律
+1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有入场动画 + 至少 1 个 SVG 动效
+2. **禁止裸背景** — 每个页面必须有 SVG 动态背景或 3D 玻璃素材装饰
+3. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) = 直接 L3
+4. **禁止静态文字** — Hero 标题必须有渐变色/发光效果/打字机动画之一
+5. **素材三件套强制** — SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一 = 不合格
+
+### Agent PUA 注入模板
+每个 Agent 的 prompt 末尾**必须**附加：
+```
+开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
+你是 P8 级别，交付标准：
+1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
+2. 主动补全边界情况（空状态、加载态、错误态、移动端适配）
+3. 每个组件必须有 Framer Motion 入场动画 — 没动画 = 偷懒
+4. SVG 必须大尺寸、多元素、有动画 — 简单几条线 = 3.25
+5. 用 [PUA生效 🔥] 标记额外完成的工作
+6. 不做 NPC — 发现问题主动修复
+```
+
 ## 执行流程
 
 ### Phase 1: 收集项目信息
@@ -72,8 +96,8 @@ C) 只要前端 — 先做界面，合约后面再说
 1. 读取 `~/.claude/styles-presets/{序号}-{风格名}.md`
 2. 读取 `~/.claude/styles-presets/svg-components.md`
 3. 确定 DApp 类型对应的 SVG 动效组合
-4. **加载 3D 玻璃素材库**（可选）：检查 `.style-config.json` 中 `assetsLibraryPath` 是否配置，若已配置则读取 `{assetsLibraryPath}/.catalog/index.json`
-5. 若素材库未配置，跳过 Agent 6（仅用 SVG 动效 + 动画库，不使用 3D 玻璃素材）
+4. **加载 3D 玻璃素材库**：读取 `/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json`
+5. 根据 DApp 类型选择素材分类（参考素材选择策略表）
 
 ### Phase 4: 初始化项目（自动）
 
@@ -105,6 +129,8 @@ mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 #### Agent 1: SVG 动效 + 动画库集成
 ```
 subagent_type: general-purpose
+mode: bypassPermissions
+⚠️ 质量红线：简单几条线/几个圆 = 不合格。每个 SVG 必须复杂精美，至少 50+ 元素。
 参考 ~/.claude/styles-presets/svg-components.md
 
 **Part A: DApp 专用 SVG 组件**
@@ -134,15 +160,16 @@ subagent_type: general-purpose
 输出到 src/components/svg/
 ```
 
-#### Agent 6: 3D 玻璃素材选取 + 集成（需用户配置素材库路径，未配置则跳过）
+#### Agent 6: 3D 玻璃素材选取 + 集成
 ```
 subagent_type: general-purpose
+mode: bypassPermissions
+⚠️ 质量红线：必须选 5-8 个素材，不能只选 1-2 个。每个页面至少 2 个 3D 装饰。
 任务：从本地 3D 玻璃素材库选取素材，压缩集成到 DApp 项目
 
-⚠️ 前置条件：用户必须在 .style-config.json 中配置 assetsLibraryPath，否则跳过此 Agent。
-素材库：{assetsLibraryPath}/（从 .style-config.json 读取）
-联系表：{assetsLibraryPath}/.catalog/sheets/
-索引：{assetsLibraryPath}/.catalog/index.json
+素材库：/Users/heart/Desktop/图片储存/建站素材/
+联系表：/Users/heart/Desktop/图片储存/建站素材/.catalog/sheets/
+索引：/Users/heart/Desktop/图片储存/建站素材/.catalog/index.json
 
 按 DApp 类型选择：
 | DApp 类型 | 首选素材 | 备选 |
@@ -162,11 +189,21 @@ subagent_type: general-purpose
 3. 输出到 public/assets/
 4. 生成 src/lib/assets.ts — 素材路径常量
 5. 生成 src/components/ui/GlassDecor.tsx — 玻璃装饰组件
+
+开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
+你是 P8 级别，交付标准：
+1. 必须选 5-8 个高质量素材，覆盖 Hero/功能区/空状态/页脚
+2. 每个素材压缩后质量必须保持（WebP quality 85+）
+3. 生成 GlassDecor 组件必须支持 hover 放大 + 浮动动画
+4. 用 [PUA生效 🔥] 标记额外完成的工作
+5. 不做 NPC — 发现适合的素材主动多选
 ```
 
 #### Agent 2: Web3 核心层
 ```
 subagent_type: general-purpose
+mode: bypassPermissions
+⚠️ 质量红线：每个 Web3 组件必须有完整状态处理（loading/success/error/disconnected）+ 动画过渡。ConnectButton 必须精美匹配设计风格，不能用默认样式。
 任务：创建 DApp Web3 交互核心
 
 src/lib/web3/：
@@ -184,9 +221,23 @@ src/components/web3/：
 10. ApprovalFlow.tsx — 代币授权流程组件（检查授权→授权→执行）
 11. TokenBalance.tsx — 代币余额显示
 12. AddressDisplay.tsx — 地址显示（缩略+复制+BSCScan链接）
+
+开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
+你是 P8 级别，交付标准：
+1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
+2. 主动补全边界情况（钱包未连接、链错误、交易失败、余额不足）
+3. ConnectButton 必须精美匹配设计风格 — 不能用 RainbowKit 默认样式
+4. TransactionStatus 必须有 Framer Motion 动画过渡
+5. 用 [PUA生效 🔥] 标记额外完成的工作
+6. 不做 NPC — 发现 Web3 交互问题主动修复
 ```
 
 #### Agent 3: DApp 页面结构（根据类型生成不同页面）
+```
+subagent_type: general-purpose
+mode: bypassPermissions
+⚠️ 质量红线：每个页面必须精美到让人 WOW。纯文字无动效 = 3.25。Hero 必须有 SVG 动态背景 + 3D 玻璃装饰 + 渐变发光标题 + 入场动画。
+```
 
 **DEX/Swap：**
 ```
@@ -245,9 +296,20 @@ src/app/settings/page.tsx — 设置
 
 所有页面使用风格预设 className + SVG 组件 + Framer Motion 动画
 
+开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
+你是 P8 级别，交付标准：
+1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
+2. 每个页面必须有 SVG 动态背景 + 3D 玻璃素材装饰 + 入场动画
+3. Hero 区标题必须有渐变色/发光效果 + Framer Motion 入场
+4. 主动补全空状态、加载态、错误态、移动端适配
+5. 用 [PUA生效 🔥] 标记额外完成的工作
+6. 不做 NPC — 发现页面可以更精美就主动加
+
 #### Agent 4: UI 组件库
 ```
 subagent_type: general-purpose
+mode: bypassPermissions
+⚠️ 质量红线：每个组件必须有 Framer Motion 入场动画 + TypeScript 严格类型。Button/Card 必须有 hover glow + scale 效果。
 
 布局 src/components/layout/：
 1. Header.tsx — 导航 + ConnectButton + 链信息
@@ -276,9 +338,23 @@ UI src/components/ui/：
 20. ProgressBar.tsx — 进度条（质押进度/募集进度）
 
 所有组件 TypeScript + 风格 className + 响应式
+
+开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
+你是 P8 级别，交付标准：
+1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
+2. 每个组件必须有 Framer Motion 入场动画 — 没动画 = 偷懒
+3. Button/Card 必须有 hover glow/scale/shadow 效果
+4. 主动补全空状态、加载态、错误态、移动端适配
+5. 用 [PUA生效 🔥] 标记额外完成的工作
+6. 不做 NPC — 发现组件可以更精致就主动加
 ```
 
 #### Agent 5: 合约集成层（根据问题3的回答决定）
+```
+subagent_type: general-purpose
+mode: bypassPermissions
+⚠️ 质量红线：合约 hooks 必须有完整错误处理 + TypeScript 严格类型。写合约必须遵循 Checks-Effects-Interactions + 自定义错误 + 事件。
+```
 
 **如果用户选"已部署"：**
 ```
@@ -324,31 +400,22 @@ src/lib/web3/mockData.ts — 模拟数据
 
 ## 关键约束
 
-### 视觉素材规则
-**每个 DApp 必须使用 SVG 动效 + 动画库。3D 玻璃素材为可选增强（需用户配置素材库路径）：**
+### 视觉素材强制规则
+**每个 DApp 必须同时使用 SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一不可：**
 
-| 素材类型 | 用途 | 来源 | 必需 |
-|----------|------|------|------|
-| SVG 动画组件 | 背景动效、交易脉冲、加载动画 | svg-components.md（代码生成） | ✅ |
-| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 | ✅ |
-| GSAP | 滚动驱动动画、数据可视化动效 | npm 包 | ✅ |
-| Framer Motion | 组件入场/退出/页面过渡 | npm 包 | ✅ |
-| 3D 玻璃素材 | Hero 装饰、功能图标、空状态插画 | 用户自配素材库（.style-config.json > assetsLibraryPath） | ❌ 可选 |
-
-**素材库配置方法**：在项目 `.style-config.json` 中添加：
-```json
-{
-  "assetsLibraryPath": "/your/path/to/3d-glass-assets"
-}
-```
-素材库目录需包含 `.catalog/index.json` 和 `.catalog/sheets/` 联系表。未配置则跳过 3D 玻璃素材，仅用 SVG 动效。
+| 素材类型 | 用途 | 来源 |
+|----------|------|------|
+| SVG 动画组件 | 背景动效、交易脉冲、加载动画 | svg-components.md（代码生成） |
+| 3D 玻璃素材 | Hero 装饰、功能图标、空状态插画 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
+| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
+| GSAP | 滚动驱动动画、数据可视化动效 | npm 包 |
+| Framer Motion | 组件入场/退出/页面过渡 | npm 包 |
 
 - 代币 Logo → SVG 圆形+文字 + vivus 路径绘制入场
-- 空状态 → SVG 插画
+- 空状态 → SVG 插画 + 3D 玻璃装饰
 - Loading → SVG 动画（TransactionPulse/LoadingSpinner）
-- 背景 → SVG 动效
-- 图标 → Lucide React
-- 装饰 → 若配置了素材库，叠加 3D 玻璃素材（悬浮 + 发光）
+- 背景 → SVG 动效 + 3D 玻璃素材悬浮
+- 图标 → Lucide React + 3D 玻璃素材图标
 
 ### Web3 UX 标准
 - 所有链上操作必须有 loading/success/error 状态
