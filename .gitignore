@@ -1,0 +1,17 @@
+node_modules/
+.next/
+dist/
+build/
+.env
+.env.local
+.env.production
+*.log
+.DS_Store
+coverage/
+.vercel/
+artifacts/
+cache/
+typechain-types/
+production/session-log.md
+production/agent-log.md
+production/compact-notes.md
