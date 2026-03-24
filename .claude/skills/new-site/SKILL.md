@@ -20,6 +20,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 3. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) 等 Tailwind 默认色 = 直接 L3
 4. **禁止静态文字** — Hero 区标题必须有渐变色/发光效果/打字机动画之一
 5. **素材三件套强制** — SVG 动效组件 + 3D 玻璃素材 + 动画库封装，三者缺一 = 不合格交付
+6. **禁止波浪分割线** — wave divider / wave section divider 一律禁止，用渐变过渡、SVG 几何图案、或透明度渐隐代替
 
 ### Agent PUA 注入模板
 每个 Agent 的 prompt 末尾**必须**附加：
