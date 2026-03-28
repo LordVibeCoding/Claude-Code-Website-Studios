@@ -15,12 +15,13 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 **本技能产出的每一个网站都必须是精美到让人 WOW 的作品。简单/素/基础 = 3.25 绩效。**
 
 ### 反偷懒铁律
-1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有入场动画（Framer Motion）+ 至少 1 个 SVG 动效
-2. **禁止裸背景** — 每个页面必须有 SVG 动态背景或 3D 玻璃素材装饰，纯色背景 = 偷懒
+1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有入场动画（Framer Motion）
+2. **禁止裸背景** — 每个页面必须有丰富的视觉层次（渐变背景 / 3D 玻璃素材 / 粒子效果 / CSS 光效 / 网格纹理等），纯色背景 = 偷懒
 3. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) 等 Tailwind 默认色 = 直接 L3
 4. **禁止静态文字** — Hero 区标题必须有渐变色/发光效果/打字机动画之一
-5. **素材三件套强制** — SVG 动效组件 + 3D 玻璃素材 + 动画库封装，三者缺一 = 不合格交付
-6. **禁止波浪分割线** — wave divider / wave section divider 一律禁止，用渐变过渡、SVG 几何图案、或透明度渐隐代替
+5. **视觉多样性强制** — 每个网站必须混合使用至少 3 种视觉手法（3D 玻璃素材 / CSS 渐变光效 / 粒子动画 / Lottie 动画 / GSAP 滚动动效 / 几何图案 / 模糊光晕 / 网格纹理等）。⚠️ **全站只用一种视觉风格（比如全是 SVG 线条）= 偷懒 = 3.25**
+6. **禁止波浪分割线** — wave divider / wave section divider 一律禁止，用渐变过渡、几何图案、或透明度渐隐代替
+7. **禁止 SVG 线条单一化** — 背景不能全是 SVG 线条/网格。SVG 只是工具之一，必须配合 3D 素材、CSS 渐变、光效、粒子等多种手法。只做 SVG 线条背景 = 最低级偷懒
 
 ### Agent PUA 注入模板
 每个 Agent 的 prompt 末尾**必须**附加：
@@ -30,7 +31,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
 2. 主动补全边界情况（空状态、加载态、错误态、移动端适配）
 3. 每个组件必须有 Framer Motion 入场动画 — 没动画 = 偷懒
-4. SVG 必须大尺寸（viewBox 至少 1920x1080）、多元素、有动画 — 简单几条线 = 3.25
+4. 视觉手法必须多样化 — 3D 玻璃素材 / CSS 渐变光效 / 粒子效果 / 模糊光晕 / 网格纹理 / Lottie 动画等混合使用。全站只有一种视觉效果（比如全是 SVG 线条）= 3.25
 5. 用 [PUA生效 🔥] 标记额外完成的工作
 6. 不做 NPC — 发现问题主动修复，发现优化点主动加上
 ```
@@ -162,7 +163,7 @@ mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 subagent_type: general-purpose
 mode: bypassPermissions
 任务：根据 {选定风格} 为 {项目名} 生成全套动效组件
-⚠️ 质量红线：简单的几条线/几个圆 = 不合格。每个 SVG 必须复杂精美，至少 50+ SVG 元素。
+⚠️ 质量红线：视觉手法多样化。背景优先用 CSS 渐变/光晕/粒子效果，SVG 用于装饰元素/图表/图标。全部背景都是 SVG 线条 = 不合格。
 
 **Part A: SVG React 组件**
 参考 ~/.claude/styles-presets/svg-components.md 中的 20 种组件
@@ -193,9 +194,12 @@ viewBox 统一 0 0 1920 1080（Hero）或 0 0 1920 200（Divider）
 - 入场/过渡动画 → Framer Motion
 
 开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
-你是 P8 级别。SVG 必须复杂精美（50+ 元素），简单几条线 = 3.25。
-每个组件必须有 CSS animation 或 Framer Motion 动画。没动画 = 偷懒。
-完成后自检：viewBox 够大吗？元素够多吗？动画够流畅吗？颜色用 CSS Variables 了吗？
+你是 P8 级别。视觉多样性是第一优先级：
+- HeroBackground 优先用 CSS 渐变 + 模糊光晕 + 粒子效果，而不是简单 SVG 线条
+- 背景手法多样化：渐变网格 / radial-gradient 光斑 / 模糊光晕(blur blob) / 噪点纹理 / 几何粒子，每个背景用不同手法
+- SVG 用于图表、图标、Logo、装饰元素，但不要把所有背景都做成 SVG 线条
+- 每个组件必须有 CSS animation 或 Framer Motion 动画
+- ⚠️ 全部背景都是 SVG 线条/网格 = 最低分 3.25
 ```
 
 #### Agent 5: 3D 玻璃素材选取 + 集成
@@ -262,12 +266,14 @@ mode: bypassPermissions
 - 大量使用动画（Framer Motion / CSS animation）
 - 每个 section 之间用 SectionDivider
 - metadata 导出 SEO 信息
-- Hero 区必须有：SVG 动态背景 + 3D 玻璃素材装饰 + 渐变/发光标题 + 入场动画
+- Hero 区必须有：丰富的视觉层次（渐变光效/粒子/模糊光晕 + 3D 玻璃素材装饰） + 渐变/发光标题 + 入场动画
 - 每个 section 必须有 Framer Motion whileInView 入场动画
+- 不同 section 用不同的视觉手法 — Hero 用渐变光晕, Features 用 3D 素材, Stats 用粒子, CTA 用模糊光斑
 
 开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
 你是 P8 级别。页面必须精美 — 纯文字列表 = 偷懒 = 3.25。
-每个 section 要有视觉冲击力：背景效果 + 动画 + 装饰元素。
+每个 section 要有视觉冲击力：多样化的背景效果（渐变/光晕/粒子/3D 素材）+ 动画 + 装饰。
+⚠️ 不要所有背景都用同一种手法（比如全是 SVG 线条），每个 section 的视觉风格要有变化。
 ```
 
 #### Agent 3: 组件库
@@ -340,21 +346,25 @@ mode: bypassPermissions
 ## 关键约束
 
 ### 视觉素材强制规则
-**每个网站必须同时使用 SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一不可：**
+**每个网站必须使用多种视觉手法，视觉多样性是核心要求：**
 
 | 素材类型 | 用途 | 来源 |
 |----------|------|------|
-| SVG 动画组件 | 背景动效、分隔器、脉冲效果 | svg-components.md（代码生成） |
+| CSS 渐变/光效 | 背景渐变、模糊光晕(blur blob)、radial-gradient 光斑 | 代码生成 |
 | 3D 玻璃素材 | Hero 装饰、Feature 图标、视觉焦点 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
 | 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
 | GSAP | 滚动驱动动画、时间线编排 | npm 包（已集成） |
 | Framer Motion | 组件入场/退出/布局动画 | npm 包（已集成） |
+| SVG 组件 | 装饰元素、图表、分隔器、图标 | svg-components.md（代码生成） |
 
-- Logo → SVG 文字组合 + vivus 路径绘制入场
-- 图标 → Lucide React SVG 或 3D 玻璃素材图标
-- 背景 → SVG 动画 + CSS gradient + 3D 玻璃装饰悬浮
-- 图表 → SVG 绘制
-- 装饰 → 3D 玻璃素材（悬浮动画 + 发光效果）+ SVG 动效叠加
+**视觉手法推荐（每个页面至少混合 3 种）：**
+- Hero 背景 → CSS 渐变网格 / 模糊光晕(blur blob) / radial-gradient 光斑 + 3D 玻璃素材浮动
+- Features → 3D 玻璃素材图标 + 卡片 hover 光效 + Framer Motion 入场
+- Stats → 粒子效果 / 数字滚动动画 + 渐变背景
+- CTA → 模糊光斑背景 + 发光按钮 + 3D 装饰
+- 图表 → SVG 绘制（饼图/环形图/时间线）
+- Logo → SVG + vivus 路径绘制入场
+- ⚠️ **全站背景都用同一种效果（如全是 SVG 线条）= 偷懒 = 不合格**
 
 ### 风格强制
 - 颜色只用 CSS Variables（var(--primary) 等）

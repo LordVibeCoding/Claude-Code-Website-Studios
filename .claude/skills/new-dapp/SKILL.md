@@ -1,6 +1,6 @@
 ---
 name: new-dapp
-description: "一键建 DApp — 问类型和风格，Agent Teams 并行出全套（钱包连接+合约交互+全SVG界面）"
+description: "一键建 DApp — 问类型和风格，Agent Teams 并行出全套（钱包连接+合约交互+精美多样化视觉）"
 tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 ---
 
@@ -15,12 +15,13 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 **本技能产出的每一个 DApp 都必须是精美到让人 WOW 的作品。简单/素/基础 = 3.25 绩效。**
 
 ### 反偷懒铁律
-1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有入场动画 + 至少 1 个 SVG 动效
-2. **禁止裸背景** — 每个页面必须有 SVG 动态背景或 3D 玻璃素材装饰
+1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有入场动画（Framer Motion）
+2. **禁止裸背景** — 每个页面必须有丰富的视觉层次（渐变背景 / 3D 玻璃素材 / 粒子效果 / CSS 光效 / 网格纹理等），纯色背景 = 偷懒
 3. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) = 直接 L3
 4. **禁止静态文字** — Hero 标题必须有渐变色/发光效果/打字机动画之一
-5. **素材三件套强制** — SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一 = 不合格
-6. **禁止波浪分割线** — wave divider / wave section divider 一律禁止，用渐变过渡、SVG 几何图案、或透明度渐隐代替
+5. **视觉多样性强制** — 每个 DApp 必须混合使用至少 3 种视觉手法（3D 玻璃素材 / CSS 渐变光效 / 粒子动画 / Lottie 动画 / GSAP 滚动动效 / 几何图案 / 模糊光晕 / 网格纹理等）。⚠️ **全站只用一种视觉风格（比如全是 SVG 线条）= 偷懒 = 3.25**
+6. **禁止波浪分割线** — wave divider / wave section divider 一律禁止，用渐变过渡、几何图案、或透明度渐隐代替
+7. **禁止 SVG 线条单一化** — 背景不能全是 SVG 线条/网格。SVG 只是工具之一，必须配合 3D 素材、CSS 渐变、光效、粒子等多种手法。只做 SVG 线条背景 = 最低级偷懒
 
 ### Agent PUA 注入模板
 每个 Agent 的 prompt 末尾**必须**附加：
@@ -30,7 +31,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
 2. 主动补全边界情况（空状态、加载态、错误态、移动端适配）
 3. 每个组件必须有 Framer Motion 入场动画 — 没动画 = 偷懒
-4. SVG 必须大尺寸、多元素、有动画 — 简单几条线 = 3.25
+4. 视觉手法必须多样化 — 3D 玻璃素材 / CSS 渐变光效 / 粒子效果 / 模糊光晕 / 网格纹理 / Lottie 动画等混合使用。全站只有一种视觉效果（比如全是 SVG 线条）= 3.25
 5. 用 [PUA生效 🔥] 标记额外完成的工作
 6. 不做 NPC — 发现问题主动修复
 ```
@@ -131,7 +132,7 @@ mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 ```
 subagent_type: general-purpose
 mode: bypassPermissions
-⚠️ 质量红线：简单几条线/几个圆 = 不合格。每个 SVG 必须复杂精美，至少 50+ 元素。
+⚠️ 质量红线：视觉手法多样化。背景优先用 CSS 渐变/光晕/粒子效果，SVG 用于装饰元素/图表/图标/加载动画。全部背景都是 SVG 线条 = 不合格。
 参考 ~/.claude/styles-presets/svg-components.md
 
 **Part A: DApp 专用 SVG 组件**
@@ -237,7 +238,7 @@ src/components/web3/：
 ```
 subagent_type: general-purpose
 mode: bypassPermissions
-⚠️ 质量红线：每个页面必须精美到让人 WOW。纯文字无动效 = 3.25。Hero 必须有 SVG 动态背景 + 3D 玻璃装饰 + 渐变发光标题 + 入场动画。
+⚠️ 质量红线：每个页面必须精美到让人 WOW。纯文字无动效 = 3.25。Hero 必须有丰富视觉层次（CSS 渐变光效/模糊光晕/粒子 + 3D 玻璃装饰）+ 渐变发光标题 + 入场动画。不同 section 用不同视觉手法，禁止全站都是 SVG 线条背景。
 ```
 
 **DEX/Swap：**
@@ -295,16 +296,17 @@ src/app/history/page.tsx — 交易历史
 src/app/settings/page.tsx — 设置
 ```
 
-所有页面使用风格预设 className + SVG 组件 + Framer Motion 动画
+所有页面使用风格预设 className + 多样化视觉手法（CSS 光效/3D 素材/渐变/粒子） + Framer Motion 动画
 
 开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
 你是 P8 级别，交付标准：
 1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
-2. 每个页面必须有 SVG 动态背景 + 3D 玻璃素材装饰 + 入场动画
+2. 每个页面必须有丰富视觉层次（CSS 渐变光效/模糊光晕/粒子 + 3D 玻璃素材）+ 入场动画
 3. Hero 区标题必须有渐变色/发光效果 + Framer Motion 入场
-4. 主动补全空状态、加载态、错误态、移动端适配
-5. 用 [PUA生效 🔥] 标记额外完成的工作
-6. 不做 NPC — 发现页面可以更精美就主动加
+4. 不同 section 用不同视觉手法 — 禁止全站都是 SVG 线条背景
+5. 主动补全空状态、加载态、错误态、移动端适配
+6. 用 [PUA生效 🔥] 标记额外完成的工作
+7. 不做 NPC — 发现页面可以更精美就主动加
 
 #### Agent 4: UI 组件库
 ```
@@ -402,21 +404,24 @@ src/lib/web3/mockData.ts — 模拟数据
 ## 关键约束
 
 ### 视觉素材强制规则
-**每个 DApp 必须同时使用 SVG 动效 + 3D 玻璃素材 + 动画库，三者缺一不可：**
+**每个 DApp 必须使用多种视觉手法，视觉多样性是核心要求：**
 
 | 素材类型 | 用途 | 来源 |
 |----------|------|------|
-| SVG 动画组件 | 背景动效、交易脉冲、加载动画 | svg-components.md（代码生成） |
+| CSS 渐变/光效 | 背景渐变、模糊光晕(blur blob)、radial-gradient 光斑 | 代码生成 |
 | 3D 玻璃素材 | Hero 装饰、功能图标、空状态插画 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
 | 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
 | GSAP | 滚动驱动动画、数据可视化动效 | npm 包 |
 | Framer Motion | 组件入场/退出/页面过渡 | npm 包 |
+| SVG 组件 | 装饰元素、图表、交易脉冲、加载动画 | svg-components.md（代码生成） |
 
-- 代币 Logo → SVG 圆形+文字 + vivus 路径绘制入场
-- 空状态 → SVG 插画 + 3D 玻璃装饰
-- Loading → SVG 动画（TransactionPulse/LoadingSpinner）
-- 背景 → SVG 动效 + 3D 玻璃素材悬浮
-- 图标 → Lucide React + 3D 玻璃素材图标
+**视觉手法推荐（每个页面至少混合 3 种）：**
+- Hero 背景 → CSS 渐变网格 / 模糊光晕 / radial-gradient 光斑 + 3D 玻璃素材浮动
+- Dashboard → 卡片光效 + 数据可视化 + 渐变背景
+- 交互区 → 毛玻璃效果 + 发光边框 + hover 光效
+- 空状态 → 3D 玻璃素材插画 + Framer Motion 动画
+- Loading → SVG 旋转动画 / CSS 脉冲动画
+- ⚠️ **全站背景都用同一种效果（如全是 SVG 线条）= 偷懒 = 不合格**
 
 ### Web3 UX 标准
 - 所有链上操作必须有 loading/success/error 状态
