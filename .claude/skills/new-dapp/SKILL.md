@@ -1,6 +1,6 @@
 ---
 name: new-dapp
-description: "一键建 DApp — 问类型和风格，Agent Teams 并行出全套（钱包连接+合约交互+精美多样化视觉）"
+description: "一键建 DApp — 问类型和风格，Agent Teams 并行出全套（钱包连接+合约交互+克制高级视觉）"
 tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 ---
 
@@ -15,13 +15,13 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 **本技能产出的每一个 DApp 都必须是精美到让人 WOW 的作品。简单/素/基础 = 3.25 绩效。**
 
 ### 反偷懒铁律
-1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有入场动画（Framer Motion）
-2. **禁止裸背景** — 每个页面必须有丰富的视觉层次（渐变背景 / 3D 玻璃素材 / 粒子效果 / CSS 光效 / 网格纹理等），纯色背景 = 偷懒
-3. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) = 直接 L3
-4. **禁止静态文字** — Hero 标题必须有渐变色/发光效果/打字机动画之一
-5. **视觉多样性强制** — 每个 DApp 必须混合使用至少 3 种视觉手法（3D 玻璃素材 / CSS 渐变光效 / 粒子动画 / Lottie 动画 / GSAP 滚动动效 / 几何图案 / 模糊光晕 / 网格纹理等）。⚠️ **全站只用一种视觉风格（比如全是 SVG 线条）= 偷懒 = 3.25**
-6. **禁止波浪分割线** — wave divider / wave section divider 一律禁止，用渐变过渡、几何图案、或透明度渐隐代替
-7. **禁止 SVG 线条单一化** — 背景不能全是 SVG 线条/网格。SVG 只是工具之一，必须配合 3D 素材、CSS 渐变、光效、粒子等多种手法。只做 SVG 线条背景 = 最低级偷懒
+1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有 Framer Motion 入场动画
+2. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) 等 Tailwind 默认色 = 直接 L3
+3. **禁止静态文字** — Hero 标题必须有渐变色/发光效果/打字机动画之一
+4. **板块分割只用深浅色交替** — 禁止任何分割线（波浪线/SVG线/直线/几何图案）。section 之间靠背景色深浅交替区分（如深色→浅色→深色），配合大量 padding 留白。参考 Figma/Stripe/Linear 的做法
+5. **背景要克制高级** — 禁止堆砌特效（粒子/SVG线条/网格纹理）。好看的背景 = 微妙的渐变 + 大留白 + 3D 玻璃素材点缀。参考 Cosmos/Celestia/Circle 的风格：柔和渐变 + 高对比文字 + 少量精致装饰
+6. **3D 玻璃素材必须用** — 从本地素材库选 5-8 个精美素材作为视觉焦点（Hero 装饰、功能图标、Dashboard 装饰），这是和别人拉开差距的关键
+7. **排版决定品质** — 字体层次分明（Display字体做标题 + Sans字体做正文）、行间距宽松(leading-relaxed)、section 内部大量留白(py-24+)。参考 Coinbase/Hedera 的克制排版
 
 ### Agent PUA 注入模板
 每个 Agent 的 prompt 末尾**必须**附加：
@@ -31,9 +31,10 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
 2. 主动补全边界情况（空状态、加载态、错误态、移动端适配）
 3. 每个组件必须有 Framer Motion 入场动画 — 没动画 = 偷懒
-4. 视觉手法必须多样化 — 3D 玻璃素材 / CSS 渐变光效 / 粒子效果 / 模糊光晕 / 网格纹理 / Lottie 动画等混合使用。全站只有一种视觉效果（比如全是 SVG 线条）= 3.25
-5. 用 [PUA生效 🔥] 标记额外完成的工作
-6. 不做 NPC — 发现问题主动修复
+4. 设计要克制高级 — 柔和渐变背景 + 大留白 + 3D玻璃素材点缀 + 高对比文字。禁止堆砌特效（SVG线条/粒子/网格纹理）
+5. section 之间只用深浅背景色交替 + 大 padding 分隔，禁止任何分割线组件
+6. 用 [PUA生效 🔥] 标记额外完成的工作
+7. 不做 NPC — 发现问题主动修复，发现优化点主动加上
 ```
 
 ## 执行流程
@@ -132,24 +133,24 @@ mkdir -p {projectSlug}/public/assets/{decorations,icons,backgrounds}
 ```
 subagent_type: general-purpose
 mode: bypassPermissions
-⚠️ 质量红线：视觉手法多样化。背景优先用 CSS 渐变/光晕/粒子效果，SVG 用于装饰元素/图表/图标/加载动画。全部背景都是 SVG 线条 = 不合格。
+⚠️ 质量红线：视觉要克制高级。背景用 CSS 渐变（radial-gradient 柔和光球），SVG 只用于图表/图标/加载动画。禁止 SVG 线条做背景。
 参考 ~/.claude/styles-presets/svg-components.md
 
-**Part A: DApp 专用 SVG 组件**
-1. HeroBackground.tsx — DApp 首页动态背景
-2. DashboardGrid.tsx — 仪表盘网格背景
-3. TransactionPulse.tsx — 交易脉冲动效（每次交易触发）
-4. TokenFlow.tsx — 代币流动路径动画（适合 DEX/Bridge）
-5. StakingOrbit.tsx — 质押轨道动画（适合 Staking）
-6. SectionDivider.tsx — 分隔器
-7. LoadingSpinner.tsx — 加载动效（SVG 旋转）
-8. EmptyState.tsx — 空状态插画（SVG）
-9. index.ts — 统一导出
+**Part A: DApp 视觉组件**
+1. HeroBackground.tsx — Hero 区微妙渐变背景（CSS radial-gradient + 柔和色彩过渡，不是 SVG 线条）
+2. FloatingDecor.tsx — 3D 玻璃素材浮动装饰封装（float animation + subtle glow）
+3. GradientOrb.tsx — 模糊渐变光球装饰（CSS blur + opacity，用于 section 背景点缀）
+4. TransactionPulse.tsx — 交易脉冲动效（每次交易触发）
+5. SvgChart.tsx — SVG 数据可视化（饼图/环形图/时间线/TVL曲线）
+6. LoadingSpinner.tsx — 加载动效（SVG 旋转）
+7. EmptyState.tsx — 空状态插画（SVG）
+8. index.ts — 统一导出
+⚠️ 禁止生成 SectionDivider — section 之间只用深浅背景色交替
 
 **Part B: 动画库封装组件**
-10. LottieAnimation.tsx — lottie-web 封装（懒加载 + 交叉观察器）
-11. SvgDrawAnimation.tsx — vivus 封装（Logo/图标路径绘制入场）
-12. Scene3D.tsx — @react-three/fiber 3D 场景（仅需要时）
+9. LottieAnimation.tsx — lottie-web 封装（懒加载 + 交叉观察器）
+10. SvgDrawAnimation.tsx — vivus 封装（Logo/图标路径绘制入场）
+11. Scene3D.tsx — @react-three/fiber 3D 场景（仅需要时）
 
 动画库选用：
 - Logo/图标入场 → vivus
@@ -238,7 +239,7 @@ src/components/web3/：
 ```
 subagent_type: general-purpose
 mode: bypassPermissions
-⚠️ 质量红线：每个页面必须精美到让人 WOW。纯文字无动效 = 3.25。Hero 必须有丰富视觉层次（CSS 渐变光效/模糊光晕/粒子 + 3D 玻璃装饰）+ 渐变发光标题 + 入场动画。不同 section 用不同视觉手法，禁止全站都是 SVG 线条背景。
+⚠️ 质量红线：每个页面必须精美到让人 WOW。纯文字无动效 = 3.25。设计要克制高级：微妙渐变背景 + 大留白 + 3D玻璃素材点缀 + 渐变发光标题 + Framer Motion 入场动画。section 之间只用深浅背景色交替 + 大 padding，禁止任何分割线。
 ```
 
 **DEX/Swap：**
@@ -296,14 +297,16 @@ src/app/history/page.tsx — 交易历史
 src/app/settings/page.tsx — 设置
 ```
 
-所有页面使用风格预设 className + 多样化视觉手法（CSS 光效/3D 素材/渐变/粒子） + Framer Motion 动画
+所有页面使用风格预设 className + 克制高级视觉（微妙渐变 + 3D 素材点缀 + 大留白）+ Framer Motion 动画
+section 之间靠深浅背景色交替分隔（如 bg-[--bg-primary] → bg-[--bg-secondary] → bg-[--bg-primary]），禁止任何分割线
+每个 section 大量留白（py-24 md:py-32），让内容呼吸
 
 开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
 你是 P8 级别，交付标准：
 1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
-2. 每个页面必须有丰富视觉层次（CSS 渐变光效/模糊光晕/粒子 + 3D 玻璃素材）+ 入场动画
+2. 设计要克制高级 — 微妙渐变背景 + 大留白 + 3D玻璃素材点缀 + 高对比文字
 3. Hero 区标题必须有渐变色/发光效果 + Framer Motion 入场
-4. 不同 section 用不同视觉手法 — 禁止全站都是 SVG 线条背景
+4. section 之间只用深浅背景色交替 + 大 padding，禁止任何分割线
 5. 主动补全空状态、加载态、错误态、移动端适配
 6. 用 [PUA生效 🔥] 标记额外完成的工作
 7. 不做 NPC — 发现页面可以更精美就主动加
@@ -320,7 +323,7 @@ mode: bypassPermissions
 3. Sidebar.tsx — DApp 侧边导航（可选）
 
 区块 src/components/sections/：
-4. Hero.tsx — DApp Hero（SVG 背景 + 统计数据 + CTA）
+4. Hero.tsx — DApp Hero（微妙渐变背景 + 3D 素材装饰 + 统计数据 + CTA）
 5. Stats.tsx — 链上统计（TVL/Volume/Users/APY）
 6. Features.tsx — 功能介绍
 
@@ -403,25 +406,27 @@ src/lib/web3/mockData.ts — 模拟数据
 
 ## 关键约束
 
-### 视觉素材强制规则
-**每个 DApp 必须使用多种视觉手法，视觉多样性是核心要求：**
+### 视觉设计原则（参考 Cosmos/Stripe/Linear/Coinbase）
+**克制 > 堆砌。好看的 DApp 不是特效多，而是每个细节都精致。**
 
-| 素材类型 | 用途 | 来源 |
+| 视觉元素 | 做法 | 禁止 |
 |----------|------|------|
-| CSS 渐变/光效 | 背景渐变、模糊光晕(blur blob)、radial-gradient 光斑 | 代码生成 |
-| 3D 玻璃素材 | Hero 装饰、功能图标、空状态插画 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
-| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
-| GSAP | 滚动驱动动画、数据可视化动效 | npm 包 |
-| Framer Motion | 组件入场/退出/页面过渡 | npm 包 |
-| SVG 组件 | 装饰元素、图表、交易脉冲、加载动画 | svg-components.md（代码生成） |
+| 背景 | 微妙 CSS 渐变（radial-gradient 柔和光球 + 深浅色交替） | SVG 线条/网格/粒子效果 |
+| 装饰 | 3D 玻璃素材浮动 + subtle glow | 堆砌多种特效 |
+| 分隔 | section 深浅背景色交替 + 大 padding(py-24+) | 任何分割线（波浪/直线/SVG/几何） |
+| 文字 | Display 字体大标题 + 渐变色/发光 + Sans 正文 | 静态普通文字 |
+| 动画 | Framer Motion 入场 + hover 微交互 + 数字滚动 | 过度动画/闪烁 |
+| 图表 | SVG 饼图/环形图/TVL曲线/交易量柱图 | — |
+| 图标 | Lucide React 或 3D 玻璃素材 | — |
 
-**视觉手法推荐（每个页面至少混合 3 种）：**
-- Hero 背景 → CSS 渐变网格 / 模糊光晕 / radial-gradient 光斑 + 3D 玻璃素材浮动
-- Dashboard → 卡片光效 + 数据可视化 + 渐变背景
-- 交互区 → 毛玻璃效果 + 发光边框 + hover 光效
-- 空状态 → 3D 玻璃素材插画 + Framer Motion 动画
-- Loading → SVG 旋转动画 / CSS 脉冲动画
-- ⚠️ **全站背景都用同一种效果（如全是 SVG 线条）= 偷懒 = 不合格**
+**section 深浅交替示例（DEX 首页）：**
+```
+Hero:       bg-[--color-bg-primary]    (深色)  + 渐变光球装饰 + 3D素材
+Swap面板:   bg-[--color-bg-secondary]  (浅一点) + 毛玻璃卡片
+Stats:      bg-[--color-bg-primary]    (深色)  + 数字滚动
+Features:   bg-[--color-bg-secondary]  (浅一点) + 功能卡片
+CTA:        bg-[--color-bg-primary]    (深色)  + 发光按钮
+```
 
 ### Web3 UX 标准
 - 所有链上操作必须有 loading/success/error 状态

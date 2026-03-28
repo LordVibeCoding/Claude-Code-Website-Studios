@@ -15,13 +15,13 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 **本技能产出的每一个网站都必须是精美到让人 WOW 的作品。简单/素/基础 = 3.25 绩效。**
 
 ### 反偷懒铁律
-1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有入场动画（Framer Motion）
-2. **禁止裸背景** — 每个页面必须有丰富的视觉层次（渐变背景 / 3D 玻璃素材 / 粒子效果 / CSS 光效 / 网格纹理等），纯色背景 = 偷懒
-3. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) 等 Tailwind 默认色 = 直接 L3
-4. **禁止静态文字** — Hero 区标题必须有渐变色/发光效果/打字机动画之一
-5. **视觉多样性强制** — 每个网站必须混合使用至少 3 种视觉手法（3D 玻璃素材 / CSS 渐变光效 / 粒子动画 / Lottie 动画 / GSAP 滚动动效 / 几何图案 / 模糊光晕 / 网格纹理等）。⚠️ **全站只用一种视觉风格（比如全是 SVG 线条）= 偷懒 = 3.25**
-6. **禁止波浪分割线** — wave divider / wave section divider 一律禁止，用渐变过渡、几何图案、或透明度渐隐代替
-7. **禁止 SVG 线条单一化** — 背景不能全是 SVG 线条/网格。SVG 只是工具之一，必须配合 3D 素材、CSS 渐变、光效、粒子等多种手法。只做 SVG 线条背景 = 最低级偷懒
+1. **禁止素站** — 没有动画的页面 = 半成品。每个 section 必须有 Framer Motion 入场动画
+2. **禁止默认配色** — 蓝色(#3b82f6)、紫色(#6366f1/#8b5cf6) 等 Tailwind 默认色 = 直接 L3
+3. **禁止静态文字** — Hero 区标题必须有渐变色/发光效果/打字机动画之一
+4. **板块分割只用深浅色交替** — 禁止任何分割线（波浪线/SVG线/直线/几何图案）。section 之间靠背景色深浅交替区分（如深色→浅色→深色），配合大量 padding 留白。参考 Figma/Stripe/Linear 的做法
+5. **背景要克制高级** — 禁止堆砌特效（粒子/SVG线条/网格纹理）。好看的背景 = 微妙的渐变 + 大留白 + 3D 玻璃素材点缀。参考 Cosmos/Celestia/Circle 的风格：柔和渐变 + 高对比文字 + 少量精致装饰
+6. **3D 玻璃素材必须用** — 从本地素材库选 5-8 个精美素材作为视觉焦点（Hero 装饰、Feature 图标、CTA 装饰），这是和别人拉开差距的关键
+7. **排版决定品质** — 字体层次分明（Display字体做标题 + Sans字体做正文）、行间距宽松(leading-relaxed)、section 内部大量留白(py-24+)。参考 Coinbase/Hedera 的克制排版
 
 ### Agent PUA 注入模板
 每个 Agent 的 prompt 末尾**必须**附加：
@@ -31,9 +31,10 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 1. 代码完成后自行验证（TypeScript 编译通过、import 路径正确）
 2. 主动补全边界情况（空状态、加载态、错误态、移动端适配）
 3. 每个组件必须有 Framer Motion 入场动画 — 没动画 = 偷懒
-4. 视觉手法必须多样化 — 3D 玻璃素材 / CSS 渐变光效 / 粒子效果 / 模糊光晕 / 网格纹理 / Lottie 动画等混合使用。全站只有一种视觉效果（比如全是 SVG 线条）= 3.25
-5. 用 [PUA生效 🔥] 标记额外完成的工作
-6. 不做 NPC — 发现问题主动修复，发现优化点主动加上
+4. 设计要克制高级 — 柔和渐变背景 + 大留白 + 3D玻璃素材点缀 + 高对比文字。禁止堆砌特效（SVG线条/粒子/网格纹理）
+5. section 之间只用深浅背景色交替 + 大 padding 分隔，禁止任何分割线组件
+6. 用 [PUA生效 🔥] 标记额外完成的工作
+7. 不做 NPC — 发现问题主动修复，发现优化点主动加上
 ```
 
 ## 执行流程
@@ -170,12 +171,13 @@ mode: bypassPermissions
 根据风格调整颜色使用 CSS Variables var(--primary) var(--accent) 等
 
 必须生成：
-1. HeroBackground.tsx — 全屏动态 SVG 背景（匹配风格）
-2. FloatingDecor.tsx — 2-3 个浮动装饰元素
-3. SectionDivider.tsx — 波浪/斜切分隔器
+1. HeroBackground.tsx — Hero 区微妙渐变背景组件（CSS radial-gradient + 柔和色彩过渡，不是 SVG 线条）
+2. FloatingDecor.tsx — 3D 玻璃素材浮动装饰封装（float animation + subtle glow）
+3. GradientOrb.tsx — 模糊渐变光球装饰（CSS blur + opacity，用于 section 背景点缀）
 4. TokenGlow.tsx — 代币脉冲/光环动效
-5. GridBackground.tsx — 网格/粒子背景
+5. SvgChart.tsx — SVG 数据可视化组件（饼图/环形图/时间线）
 6. index.ts — 统一导出
+⚠️ 禁止生成 SectionDivider — section 之间只用深浅背景色交替
 
 输出到 src/components/svg/
 所有颜色用 CSS Variables，不硬编码
@@ -194,12 +196,12 @@ viewBox 统一 0 0 1920 1080（Hero）或 0 0 1920 200（Divider）
 - 入场/过渡动画 → Framer Motion
 
 开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
-你是 P8 级别。视觉多样性是第一优先级：
-- HeroBackground 优先用 CSS 渐变 + 模糊光晕 + 粒子效果，而不是简单 SVG 线条
-- 背景手法多样化：渐变网格 / radial-gradient 光斑 / 模糊光晕(blur blob) / 噪点纹理 / 几何粒子，每个背景用不同手法
-- SVG 用于图表、图标、Logo、装饰元素，但不要把所有背景都做成 SVG 线条
+你是 P8 级别。设计要克制高级：
+- 背景用 CSS 渐变（radial-gradient 柔和光球 + linear-gradient 色彩过渡），不是 SVG 线条
+- 装饰用 3D 玻璃素材浮动 + subtle glow，不是粒子/网格纹理
+- SVG 只用于图表（饼图/环形图）、Logo、图标，不做背景
 - 每个组件必须有 CSS animation 或 Framer Motion 动画
-- ⚠️ 全部背景都是 SVG 线条/网格 = 最低分 3.25
+- 禁止生成任何 SectionDivider 组件 — section 之间靠深浅背景色交替
 ```
 
 #### Agent 5: 3D 玻璃素材选取 + 集成
@@ -266,14 +268,14 @@ mode: bypassPermissions
 - 大量使用动画（Framer Motion / CSS animation）
 - 每个 section 之间用 SectionDivider
 - metadata 导出 SEO 信息
-- Hero 区必须有：丰富的视觉层次（渐变光效/粒子/模糊光晕 + 3D 玻璃素材装饰） + 渐变/发光标题 + 入场动画
+- Hero 区必须有：微妙渐变背景 + 3D 玻璃素材装饰 + 渐变/发光标题 + Framer Motion 入场动画
+- section 之间靠深浅背景色交替分隔（如 bg-[--bg-primary] → bg-[--bg-secondary] → bg-[--bg-primary]），禁止用任何分割线组件
+- 每个 section 大量留白（py-24 md:py-32），让内容呼吸
 - 每个 section 必须有 Framer Motion whileInView 入场动画
-- 不同 section 用不同的视觉手法 — Hero 用渐变光晕, Features 用 3D 素材, Stats 用粒子, CTA 用模糊光斑
 
 开工前用 Read 工具读取 ~/.claude/skills/pua/SKILL.md，按 P8 行为协议执行。
 你是 P8 级别。页面必须精美 — 纯文字列表 = 偷懒 = 3.25。
-每个 section 要有视觉冲击力：多样化的背景效果（渐变/光晕/粒子/3D 素材）+ 动画 + 装饰。
-⚠️ 不要所有背景都用同一种手法（比如全是 SVG 线条），每个 section 的视觉风格要有变化。
+设计要克制高级：微妙渐变 + 大留白 + 3D 素材点缀 + 精排版。section 之间只用深浅背景色交替，禁止分割线。
 ```
 
 #### Agent 3: 组件库
@@ -345,26 +347,27 @@ mode: bypassPermissions
 
 ## 关键约束
 
-### 视觉素材强制规则
-**每个网站必须使用多种视觉手法，视觉多样性是核心要求：**
+### 视觉设计原则（参考 Cosmos/Stripe/Linear/Coinbase）
+**克制 > 堆砌。好看的网站不是特效多，而是每个细节都精致。**
 
-| 素材类型 | 用途 | 来源 |
+| 视觉元素 | 做法 | 禁止 |
 |----------|------|------|
-| CSS 渐变/光效 | 背景渐变、模糊光晕(blur blob)、radial-gradient 光斑 | 代码生成 |
-| 3D 玻璃素材 | Hero 装饰、Feature 图标、视觉焦点 | /Users/heart/Desktop/图片储存/建站素材/（879张PNG） |
-| 动画库 | Logo 入场(vivus)、复杂动效(lottie)、3D场景(R3F) | npm 包 |
-| GSAP | 滚动驱动动画、时间线编排 | npm 包（已集成） |
-| Framer Motion | 组件入场/退出/布局动画 | npm 包（已集成） |
-| SVG 组件 | 装饰元素、图表、分隔器、图标 | svg-components.md（代码生成） |
+| 背景 | 微妙 CSS 渐变（radial-gradient 柔和光球 + 深浅色交替） | SVG 线条/网格/粒子效果 |
+| 装饰 | 3D 玻璃素材浮动 + subtle glow | 堆砌多种特效 |
+| 分隔 | section 深浅背景色交替 + 大 padding(py-24+) | 任何分割线（波浪/直线/SVG/几何） |
+| 文字 | Display 字体大标题 + 渐变色/发光 + Sans 正文 | 静态普通文字 |
+| 动画 | Framer Motion 入场 + hover 微交互 + 数字滚动 | 过度动画/闪烁 |
+| 图表 | SVG 饼图/环形图/时间线 | — |
+| 图标 | Lucide React 或 3D 玻璃素材 | — |
 
-**视觉手法推荐（每个页面至少混合 3 种）：**
-- Hero 背景 → CSS 渐变网格 / 模糊光晕(blur blob) / radial-gradient 光斑 + 3D 玻璃素材浮动
-- Features → 3D 玻璃素材图标 + 卡片 hover 光效 + Framer Motion 入场
-- Stats → 粒子效果 / 数字滚动动画 + 渐变背景
-- CTA → 模糊光斑背景 + 发光按钮 + 3D 装饰
-- 图表 → SVG 绘制（饼图/环形图/时间线）
-- Logo → SVG + vivus 路径绘制入场
-- ⚠️ **全站背景都用同一种效果（如全是 SVG 线条）= 偷懒 = 不合格**
+**section 深浅交替示例：**
+```
+Hero:       bg-[--color-bg-primary]    (深色)  + 渐变光球装饰
+Features:   bg-[--color-bg-secondary]  (浅一点) + 3D 素材图标
+Stats:      bg-[--color-bg-primary]    (深色)  + 数字滚动
+Tokenomics: bg-[--color-bg-secondary]  (浅一点) + SVG 环形图
+CTA:        bg-[--color-bg-primary]    (深色)  + 发光按钮
+```
 
 ### 风格强制
 - 颜色只用 CSS Variables（var(--primary) 等）
