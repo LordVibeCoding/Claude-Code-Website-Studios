@@ -23,6 +23,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 5. **背景要克制高级** — 禁止堆砌特效（粒子/SVG线条/网格纹理）。好看的背景 = 微妙的渐变 + 大留白 + 3D 玻璃素材点缀。参考 Cosmos/Celestia/Circle 的风格：柔和渐变 + 高对比文字 + 少量精致装饰
 6. **3D 玻璃素材必须用** — 从本地素材库选 5-8 个精美素材作为视觉焦点（Hero 装饰、Feature 图标、CTA/Dashboard 装饰），这是和别人拉开差距的关键
 7. **排版决定品质** — 字体层次分明（Display字体做标题 + Sans字体做正文）、行间距宽松(leading-relaxed)、section 内部大量留白(py-24+)。参考 Coinbase/Hedera 的克制排版
+8. **禁止手绘 Logo SVG** — 如果用户提供了 Logo 图片（PNG/JPG/WebP 等），必须用 `vtracer` 命令行工具转成 SVG，禁止 Agent 手写/手绘 SVG logo。没提供 Logo 的情况下才用文字 Logo
 
 ### Agent PUA 注入模板
 每个 Agent 的 prompt 末尾**必须**附加：
@@ -36,6 +37,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 5. section 之间只用深浅背景色交替 + 大 padding 分隔，禁止任何分割线组件
 6. 用 [PUA生效 🔥] 标记额外完成的工作
 7. 不做 NPC — 发现问题主动修复，发现优化点主动加上
+8. 如果用户提供了 Logo 图片，必须用 `vtracer --input {logo路径} --output public/logo.svg` 转换，禁止手绘 SVG logo
 ```
 
 ---
@@ -57,7 +59,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 可选：
 - 已有智能合约 ABI（DApp 场景，如有则直接导入）
 - 品牌色（不提供则根据风格生成）
-- Logo SVG（不提供则生成文字 Logo）
+- Logo 图片路径（PNG/JPG/WebP 等，如提供会自动用 vtracer 转 SVG；不提供则用文字 Logo）
 - 额外页面需求
 ```
 
@@ -450,6 +452,13 @@ DApp 额外 UI 组件（仅 DApp 模式）：
 23. Tooltip.tsx — 提示框
 24. Skeleton.tsx — 骨架屏加载
 25. ProgressBar.tsx — 进度条（质押进度/募集进度）
+
+Logo 处理规则：
+- 如果用户提供了 Logo 图片，先用 `vtracer --input {logo路径} --output public/logo.svg --colormode color --filter_speckle 4 --color_precision 6 --corner_threshold 60 --segment_length 4` 转成 SVG
+- Header.tsx 和 Footer.tsx 中引用 public/logo.svg（`<img src="/logo.svg" alt="{项目名} Logo" />`）
+- OG 图片（opengraph-image.tsx）中也引用 logo.svg
+- **禁止手写 SVG path 来画 logo** — 必须用 vtracer 从图片转换
+- 没提供 Logo 图片时才用文字 Logo（项目名首字母或全名）
 
 所有组件必须：
 - 使用风格预设 className
