@@ -24,6 +24,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 6. **3D 玻璃素材必须用** — 从本地素材库选 5-8 个精美素材作为视觉焦点（Hero 装饰、Feature 图标、CTA/Dashboard 装饰），这是和别人拉开差距的关键
 7. **排版决定品质** — 字体层次分明（Display字体做标题 + Sans字体做正文）、行间距宽松(leading-relaxed)、section 内部大量留白(py-24+)。参考 Coinbase/Hedera 的克制排版
 8. **禁止手绘 Logo SVG** — 如果用户提供了 Logo 图片（PNG/JPG/WebP 等），必须用 `vtracer` 命令行工具转成 SVG，禁止 Agent 手写/手绘 SVG logo。没提供 Logo 的情况下才用文字 Logo
+   - **vtracer v0.6.5 已预装在本机，直接 bash 调用即可，无需 cargo install**
 
 ### Agent PUA 注入模板
 每个 Agent 的 prompt 末尾**必须**附加：
@@ -37,7 +38,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Agent
 5. section 之间只用深浅背景色交替 + 大 padding 分隔，禁止任何分割线组件
 6. 用 [PUA生效 🔥] 标记额外完成的工作
 7. 不做 NPC — 发现问题主动修复，发现优化点主动加上
-8. 如果用户提供了 Logo 图片，必须用 `vtracer --input {logo路径} --output public/logo.svg` 转换，禁止手绘 SVG logo
+8. 如果用户提供了 Logo 图片，必须用 `vtracer --input {logo路径} --output public/logo.svg` 转换，禁止手绘 SVG logo（vtracer 已预装，直接调用，无需安装）
 ```
 
 ---
@@ -454,6 +455,7 @@ DApp 额外 UI 组件（仅 DApp 模式）：
 25. ProgressBar.tsx — 进度条（质押进度/募集进度）
 
 Logo 处理规则：
+- vtracer v0.6.5 已预装在本机，直接 bash 调用即可，无需 cargo install
 - 如果用户提供了 Logo 图片，先用 `vtracer --input {logo路径} --output public/logo.svg --colormode color --filter_speckle 4 --color_precision 6 --corner_threshold 60 --segment_length 4` 转成 SVG
 - Header.tsx 和 Footer.tsx 中引用 public/logo.svg（`<img src="/logo.svg" alt="{项目名} Logo" />`）
 - OG 图片（opengraph-image.tsx）中也引用 logo.svg
